@@ -1,0 +1,18 @@
+# 1. Dependencies
+node_modules/
+
+# 2. Logs
+*.log
+npm-debug.log*
+
+# 3. Security (IMPORTANT)
+# Never commit your actual secrets
+.env
+.env.local
+*.db
+*.sqlite
+
+# 4. OS/Editor
+.DS_Store
+Thumbs.db
+.vscode/

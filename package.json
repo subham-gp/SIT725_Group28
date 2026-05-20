@@ -1,0 +1,30 @@
+{
+  "name": "sit725_group28",
+  "version": "1.0.0",
+  "description": "Student Task Management System",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/subham-gp/SIT725_Group28.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/subham-gp/SIT725_Group28/issues"
+  },
+  "homepage": "https://github.com/subham-gp/SIT725_Group28#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongodb": "^7.2.0"
+  },
+  "devDependencies": {
+    "chai": "^6.2.2",
+    "mocha": "^11.7.5",
+    "request": "^2.88.2"
+  }
+}
