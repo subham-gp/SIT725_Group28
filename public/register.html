@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Register Page</title>
+
+  <!-- Materialize CSS -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./css/register.css">
+</head>
+
+<body>
+
+  <div class="register-container">
+
+    <div class="card register-card">
+      <div class="card-content">
+
+        <h4 class="center-align">Create Account</h4>
+
+        <p class="center-align grey-text">
+          Student Task Management System
+        </p>
+
+        <form id="registerForm">
+
+          <div class="input-field">
+            <input id="username" type="text" required>
+            <label for="username" class="active">Username</label>
+          </div>
+
+          <div class="input-field">
+            <input id="email" type="email" required>
+            <label for="email" class="active">Email</label>
+          </div>
+
+          <div class="input-field">
+            <input id="password" type="password" required>
+            <label for="password" class="active">Password</label>
+          </div>
+
+          <div class="input-field">
+            <input id="confirmPassword" type="password" required>
+            <label for="confirmPassword" class="active">
+              Confirm Password
+            </label>
+          </div>
+
+          <button type="submit"
+            class="btn waves-effect waves-light full-width">
+            Register
+          </button>
+
+          <p id="message" class="center-align"></p>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="./register.js"></script>
+
+</body>
+</html>
