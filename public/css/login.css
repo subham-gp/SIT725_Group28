@@ -1,0 +1,26 @@
+body.login-bg {
+  background: #f5f7fb;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.login-card {
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.full-btn {
+  width: 100%;
+  margin-top: 10px;
+  background: #1976d2;
+}
+
+.full-btn:hover {
+  background: #125aa3;
+}
+
+.small-text {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}

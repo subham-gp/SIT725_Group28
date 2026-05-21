@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Student Task System</title>
+
+  <!-- Materialize CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/login.css">
+</head>
+
+<body class="login-bg">
+
+  <div class="container">
+    <div class="row center-align">
+
+      <div class="col s12 m6 offset-m3">
+
+        <div class="card login-card">
+          <div class="card-content">
+
+            <h5 class="center">Welcome Back</h5>
+            <p class="center grey-text">Login to manage your tasks</p>
+
+            <form id="loginForm">
+
+              <div class="input-field">
+                <input id="email" type="email" required>
+                <label for="email">Email</label>
+              </div>
+
+              <div class="input-field">
+                <input id="password" type="password" required>
+                <label for="password">Password</label>
+              </div>
+
+              <button class="btn waves-effect waves-light full-btn" type="submit">
+                Login
+              </button>
+
+            </form>
+
+            <p class="center small-text">
+              Don't have an account? <a href="register.html">Sign up</a>
+            </p>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="js/login.js"></script>
+
+</body>
+</html>
