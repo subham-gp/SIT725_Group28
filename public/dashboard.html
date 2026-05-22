@@ -1,14 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <title>TaskFlow — Dashboard</title>
-        <link rel="stylesheet" href="css/dashboard.css" />
-        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-    </head>
-    <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskFlow — Dashboard</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
 
-    </body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span>
+      <span class="logo-text">TaskFlow</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-solid fa-list-check"></i>
+        <span>My Tasks</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-solid fa-calendar-days"></i>
+        <span>Deadlines</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Search</span>
+      </a>
+      <a href="#" class="nav-item">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar" id="sidebarAvatar"></div>
+        <div class="user-info">
+            <span class="user-name" id="sidebarUsername"></span>
+            <span class="user-role">Student</span>
+        </div>
+      </div>
+      <a href="#" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+    </div>
+  </aside>
+
+
+  <main class="main">
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle" id="currentDate"></p>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-add-task">
+          <i class="fa-solid fa-plus"></i>
+          New Task
+        </button>
+        <button class="notif-btn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-badge" id="notifCount"></span>
+        </button>
+      </div>
+    </header>
+
+
+    <section class="summary-cards">
+      <div class="card card--total">
+        <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
+        <div class="card-body">
+          <span class="card-label">Total Tasks</span>
+          <span class="card-value" id="countTotal">—</span>
+        </div>
+        <div class="card-trend" id="trendTotal"></div>
+      </div>
+
+      <div class="card card--pending">
+        <div class="card-icon"><i class="fa-solid fa-hourglass-start"></i></div>
+        <div class="card-body">
+          <span class="card-label">Pending</span>
+          <span class="card-value" id="countPending">—</span>
+        </div>
+        <div class="card-trend neutral">Not started yet</div>
+      </div>
+
+      <div class="card card--progress">
+        <div class="card-icon"><i class="fa-solid fa-spinner"></i></div>
+        <div class="card-body">
+          <span class="card-label">In Progress</span>
+          <span class="card-value" id="countProgress">—</span>
+        </div>
+        <div class="card-trend up"><i class="fa-solid fa-arrow-trend-up"></i> Active now</div>
+      </div>
+
+      <div class="card card--completed">
+        <div class="card-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="card-body">
+          <span class="card-label">Completed</span>
+          <span class="card-value" id="countCompleted">—</span>
+        </div>
+        <div class="card-trend up" id="trendCompleted"></div>
+      </div>
+    </section>
+
+    <section class="mid-row">
+
+        <div class="panel panel--progress">
+        <div class="panel-header">
+          <h2>Overall Progress</h2>
+          <span class="panel-badge">This Semester</span>
+        </div>
+        <div class="progress-ring-wrap">
+          <svg class="progress-ring" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="50"/>
+            <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50"
+                    stroke-dasharray="314" stroke-dashoffset="314"/>
+          </svg>
+          <div class="ring-label">
+            <span class="ring-pct" id="ringPct">—</span>
+            <span class="ring-sub">Complete</span>
+          </div>
+        </div>
+        <div class="progress-legend">
+          <div class="legend-item">
+            <span class="dot dot--completed"></span>Completed
+            <b id="legendCompleted">—</b>
+          </div>
+          <div class="legend-item">
+            <span class="dot dot--progress"></span>In Progress
+            <b id="legendProgress">—</b>
+          </div>
+          <div class="legend-item">
+            <span class="dot dot--pending"></span>Pending
+            <b id="legendPending">—</b>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="panel panel--deadlines">
+        <div class="panel-header">
+          <h2>Upcoming Deadlines</h2>
+          <a href="#" class="panel-link">View all</a>
+        </div>
+       
+        <ul class="deadline-list" id="deadlineList">
+          <li class="empty-state">No upcoming deadlines</li>
+        </ul>
+      </div>
+
+    </section>
+
+
+    <section class="panel panel--tasks">
+      <div class="panel-header">
+        <h2>Recent Tasks</h2>
+        <div class="task-filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="pending">Pending</button>
+          <button class="filter-btn" data-filter="progress">In Progress</button>
+          <button class="filter-btn" data-filter="completed">Completed</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="task-table">
+          <thead>
+            <tr>
+              <th>Task Name</th>
+              <th>Course</th>
+              <th>Due Date</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          
+          
+          <tbody id="taskTableBody">
+            <tr>
+              <td colspan="6" class="empty-state">No tasks found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/dashboard.js"></script>
+</body>
 </html>
