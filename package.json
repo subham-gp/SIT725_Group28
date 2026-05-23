@@ -19,8 +19,10 @@
   },
   "homepage": "https://github.com/subham-gp/SIT725_Group28#readme",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "express": "^5.2.1",
-    "mongodb": "^7.2.0"
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.2"
   },
   "devDependencies": {
     "chai": "^6.2.2",
