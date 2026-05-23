@@ -20,20 +20,19 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // PASSWORD HASHING
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
     if (!this.isModified('password')) return next();
-    
+
     try {
         const salt = await bcrypt.genSalt(10); //10 salt rounds
         this.password = await bcrypt.hash(this.password, salt); // Hashes password + salt
-        next();
     } catch (err) {
-        next(err);
+        throw err;      //changed the next() -SG
     }
 });
 
 
-UserSchema.methods.comparePassword = async function(candidatePassword) {
+UserSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
