@@ -1,2 +1,18 @@
 # SIT725_Group28
-Student Task Management System
+## Student Task Management System
+
+## Team Members :
+- Zoey Moosavichoebeh
+- Mei Alicia Ugo Osita
+- Akruti Ajay Singh
+- Emylin Poorvikah Pragash
+- Subham Gupta 
+
+## Overview
+This is a web-based Student Task Management System designed to help university students manage their academic tasks efficiently. The system allows users to create, organise, and track tasks in one central platform.
+
+## Tech Stack
+- Frontend: HTML, CSS (Materialize), JavaScript
+- Backend: Node.js, Express.js
+- Database: MongoDB
+- Version Control: Git & GitHub
