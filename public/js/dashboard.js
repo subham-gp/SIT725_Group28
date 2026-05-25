@@ -1,8 +1,63 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   const currentUser = null;  // TODO: load from session
-  const tasks       = [];    // TODO: fetch from GET /api/tasks
+  const tasks = [];    // TODO: fetch from GET /api/tasks
   const notifications = [];  // TODO: fetch from GET /api/notifications
+
+  const taskForm = document.getElementById("taskForm");
+  const taskTableBody = document.getElementById("taskTableBody");
+  const modal = document.getElementById("taskModal");
+
+  const openBtn = document.querySelector(".btn-add-task");
+  const closeBtn = document.getElementById("closeModal");
+
+  // Task creation MODAL open & close
+  if (openBtn && modal) {
+    openBtn.addEventListener("click", () => {
+      modal.classList.remove("hidden");
+    });
+  }
+
+  if (closeBtn && modal) {
+    closeBtn.addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
+  }
+
+  // Task Creation
+  if (taskForm && taskTableBody) {
+    taskForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const title = document.getElementById("taskTitle").value;
+      const description = document.getElementById("taskDescription").value;
+      const dueDate = document.getElementById("taskDueDate").value;
+      const priority = document.getElementById("taskPriority").value;
+      const course = document.getElementById("taskCourse").value;
+
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+      <td>${escapeHtml(title)}</td>
+      <td>${escapeHtml(course)}</td>
+      <td>${dueDate ? formatDate(dueDate) : "-"}</td>
+      <td>${capitalize(priority)}</td>
+      <td>${capitalize("pending")}</td>
+      <td>
+        <button onclick="handleEdit(this)">Edit</button>
+        <button onclick="handleDelete(this)">Delete</button>
+      </td>
+    `;
+
+      const emptyState = taskTableBody.querySelector(".empty-state");
+      if (emptyState) taskTableBody.innerHTML = "";
+
+      taskTableBody.prepend(row);
+
+      taskForm.reset();
+      modal.classList.add("hidden");
+    });
+  }
 
   function init() {
     renderUser(currentUser);
@@ -44,9 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function initFilterButtons(tasks) {
   }
 
-  window.handleEdit = function(id) { };
+  window.handleEdit = function (id) { };
 
-  window.handleDelete = function(id) { };
+  window.handleDelete = function (id) { };
 
   function setText(id, value) {
     const el = document.getElementById(id);
