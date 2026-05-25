@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaskFlow — Dashboard</title>
   <link rel="stylesheet" href="css/dashboard.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+
 <body>
 
   <aside class="sidebar">
@@ -43,8 +47,8 @@
       <div class="user-chip">
         <div class="user-avatar" id="sidebarAvatar"></div>
         <div class="user-info">
-            <span class="user-name" id="sidebarUsername"></span>
-            <span class="user-role">Student</span>
+          <span class="user-name" id="sidebarUsername"></span>
+          <span class="user-role">Student</span>
         </div>
       </div>
       <a href="#" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
@@ -112,16 +116,16 @@
 
     <section class="mid-row">
 
-        <div class="panel panel--progress">
+      <div class="panel panel--progress">
         <div class="panel-header">
           <h2>Overall Progress</h2>
           <span class="panel-badge">This Semester</span>
         </div>
         <div class="progress-ring-wrap">
           <svg class="progress-ring" viewBox="0 0 120 120">
-            <circle class="ring-bg" cx="60" cy="60" r="50"/>
-            <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50"
-                    stroke-dasharray="314" stroke-dashoffset="314"/>
+            <circle class="ring-bg" cx="60" cy="60" r="50" />
+            <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50" stroke-dasharray="314"
+              stroke-dashoffset="314" />
           </svg>
           <div class="ring-label">
             <span class="ring-pct" id="ringPct">—</span>
@@ -150,7 +154,7 @@
           <h2>Upcoming Deadlines</h2>
           <a href="#" class="panel-link">View all</a>
         </div>
-       
+
         <ul class="deadline-list" id="deadlineList">
           <li class="empty-state">No upcoming deadlines</li>
         </ul>
@@ -181,8 +185,8 @@
               <th>Actions</th>
             </tr>
           </thead>
-          
-          
+
+
           <tbody id="taskTableBody">
             <tr>
               <td colspan="6" class="empty-state">No tasks found</td>
@@ -195,5 +199,40 @@
   </main>
 
   <script src="js/dashboard.js"></script>
+
+  <!-- TASK MODAL -->
+  <div id="taskModal" class="modal hidden">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h2>Create Task</h2>
+        <button id="closeModal" class="close-btn">&times;</button>
+      </div>
+
+      <form id="taskForm">
+
+        <input type="text" id="taskTitle" placeholder="Task title" required>
+
+        <input type="text" id="taskCourse" placeholder="Course / Unit">
+
+        <textarea id="taskDescription" placeholder="Description"></textarea>
+
+        <input type="date" id="taskDueDate" required>
+
+        <select id="taskPriority">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <button type="submit" class="submit-btn">Create Task</button>
+
+      </form>
+
+    </div>
+
+  </div>
 </body>
+
 </html>
