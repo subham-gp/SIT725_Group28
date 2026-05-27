@@ -41,7 +41,7 @@ exports.getTasks = async (req, res) => {
         }
 
         //finding task and sorting with closest deasline first
-        const userTask = (await Task.find({ user: userId })).toSorted({ dueDate: 1 });
+        const userTasks = await Task.find({ user: userId }).sort({ dueDate: 1 });
 
         return res.status(200).json({
             success: true,
