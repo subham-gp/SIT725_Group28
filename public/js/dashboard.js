@@ -1,7 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const currentUser = null;  // TODO: load from session
-  const tasks = [];    // TODO: fetch from GET /api/tasks
+  //load from session -SG
+  const currentUserId = localStorage.getItem('userId');
+  const currentUsername = localStorage.getItem('username');
+
+  //bounces unauthenticated users -SG
+  if (!currentUserId) {
+    window.location.href = 'login.html';
+    ReturnDocument;
+  }
+
+  let tasks = [];
+
   const notifications = [];  // TODO: fetch from GET /api/notifications
 
   const taskForm = document.getElementById("taskForm");
@@ -24,38 +34,68 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // -SG
+  async function fetchUserTasks() {
+    try {
+      //send a request to our backend router with the current userId
+      const response = await fetch(`/api/auth/tasks?userId=${currentUserId}`);
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        tasks = data.tasks;        //overwrite our empty tasks array with the database records
+        renderTaskTable(tasks);    //redraws our table layout with the fresh data
+      } else {
+        console.error("Failed to load tasks from database:", data.message);
+      }
+    } catch (error) {
+      console.error("Error communicating with task API:", error);
+    }
+  }
+
   // Task Creation
-  if (taskForm && taskTableBody) {
-    taskForm.addEventListener("submit", function (e) {
+  if (taskForm) {
+    taskForm.addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const title = document.getElementById("taskTitle").value;
+      const course = document.getElementById("taskCourse").value;
       const description = document.getElementById("taskDescription").value;
       const dueDate = document.getElementById("taskDueDate").value;
       const priority = document.getElementById("taskPriority").value;
-      const course = document.getElementById("taskCourse").value;
 
-      const row = document.createElement("tr");
+      try {
+        //sending the task information straight to our backend router via POST -SG
+        const response = await fetch('/api/auth/tasks/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user: currentUserId, //links the task to this logged-in user
+            title,
+            course,
+            description,
+            dueDate,
+            priority
+          })
+        });
 
-      row.innerHTML = `
-      <td>${escapeHtml(title)}</td>
-      <td>${escapeHtml(course)}</td>
-      <td>${dueDate ? formatDate(dueDate) : "-"}</td>
-      <td>${capitalize(priority)}</td>
-      <td>${capitalize("pending")}</td>
-      <td>
-        <button onclick="handleEdit(this)">Edit</button>
-        <button onclick="handleDelete(this)">Delete</button>
-      </td>
-    `;
+        const data = await response.json();
 
-      const emptyState = taskTableBody.querySelector(".empty-state");
-      if (emptyState) taskTableBody.innerHTML = "";
+        if (response.ok && data.success) {
+          //add the newly saved MongoDB task object
+          tasks.push(data.task);
 
-      taskTableBody.prepend(row);
+          //updating the dashboard table
+          renderTaskTable(tasks);
 
-      taskForm.reset();
-      modal.classList.add("hidden");
+          taskForm.reset();
+          modal.classList.add("hidden");
+        } else {
+          alert(data.message || "Failed to create task.");
+        }
+      } catch (error) {
+        console.error("Task submission failure:", error);
+        alert("Something went wrong saving your task to the database.");
+      }
     });
   }
 
@@ -63,6 +103,9 @@ document.addEventListener("DOMContentLoaded", () => {
     renderUser(currentUser);
     renderDate();
     renderNotifBadge(notifications);
+
+    fetchUserTasks();
+
     renderSummaryCards(tasks);
     renderProgressRing(tasks);
     renderDeadlines(tasks);
@@ -93,7 +136,35 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderDeadlines(tasks) {
   }
 
+
+  //moved the taskTableBody here and added a loop -SG
   function renderTaskTable(tasks, filter = "all") {
+    if (!taskTableBody) return;
+    taskTableBody.innerHTML = "";
+
+    //If MongoDB returns no tasks, show the empty layout state
+    if (tasks.length === 0) {
+      taskTableBody.innerHTML = `<tr><td colspan="6" class="empty-state">No tasks found</td></tr>`;
+      return;
+    }
+
+    //Loop through the database items and paint them to the screen -SG
+    tasks.forEach(task => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+      <td>${escapeHtml(title)}</td>
+      <td>${escapeHtml(course)}</td>
+      <td>${dueDate ? formatDate(dueDate) : "-"}</td>
+      <td>${capitalize(priority)}</td>
+      <td>${capitalize("pending")}</td>
+      <td>
+        <button onclick="handleEdit(this)">Edit</button>
+        <button onclick="handleDelete(this)">Delete</button>
+      </td>
+    `;
+      taskTableBody.appendChild(row);
+    });
   }
 
   function initFilterButtons(tasks) {
