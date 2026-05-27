@@ -73,4 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
     return div.innerHTML;
   }
 
+window.handleEdit = function(id) {
+  const task = tasks.find(t => t.id === id);  
+};
+
 });
