@@ -15,6 +15,14 @@ const TaskSchema = new mongoose.Schema({
         maxlength: [100, 'Title cannot exceed 100 characters']
     },
 
+    //added Course -SG
+    course: {
+        type: String,
+        trim: true,
+        maxlength: [50, 'Course name cannot exceed 50 Characters'],
+        default: 'General'
+    },
+
     description: {
         type: String,
         trim: true,
@@ -38,5 +46,5 @@ const TaskSchema = new mongoose.Schema({
         default: 'medium'
     }
 
-}, { timestamps: true }); 
+}, { timestamps: true });
 module.exports = mongoose.model('Task', TaskSchema);
