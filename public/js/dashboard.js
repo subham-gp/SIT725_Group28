@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //bounces unauthenticated users -SG
   if (!currentUserId) {
     window.location.href = 'login.html';
-    ReturnDocument;
+    return;
   }
 
   let tasks = [];
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function init() {
-    renderUser(currentUser);
+    renderUser();
     renderDate();
     renderNotifBadge(notifications);
 
@@ -116,6 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
 
   function renderUser(user) {
+    const welcomeEl = document.querySelector(".topbar-user h1");
+    if (welcomeEl) {
+      welcomeEl.textContent = `Welcome back, ${currentUsername || 'Student'}`;
+    }
   }
 
 
@@ -153,14 +157,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
-      <td>${escapeHtml(title)}</td>
-      <td>${escapeHtml(course)}</td>
-      <td>${dueDate ? formatDate(dueDate) : "-"}</td>
-      <td>${capitalize(priority)}</td>
-      <td>${capitalize("pending")}</td>
+      <td><strong>${escapeHtml(task.title)}</strong><br><small class="grey-text">${escapeHtml(task.description || '')}</small></td>
+      <td>${escapeHtml(task.course || 'General')}</td>
+      <td>${task.dueDate ? formatDate(task.dueDate) : "-"}</td>
+      <td><span class="priority-badge ${task.priority}">${task.priority.toUpperCase()}</span></td>
+      <td><span class="status-badge ${task.status || 'todo'}">${(task.status || 'todo').toUpperCase()}</span></td>
       <td>
-        <button onclick="handleEdit(this)">Edit</button>
-        <button onclick="handleDelete(this)">Delete</button>
+        <button class="action-btn edit" onclick="handleEdit('${task._id}')">Edit</button>
+        <button class="action-btn delete" onclick="handleDelete('${task._id}')">Delete</button>
       </td>
     `;
       taskTableBody.appendChild(row);
