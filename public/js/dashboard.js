@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTaskTable(tasks);    //redraws our table layout with the fresh data
         renderTaskCards(tasks);
         renderSummaryCards(tasks);
-        renderProgressRing(tasks);
+        renderProgressPie(tasks);
         renderDeadlines(tasks);
       } else {
         console.error("Failed to load tasks from database:", data.message);
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
           renderTaskTable(tasks);
           renderTaskCards(tasks);
           renderSummaryCards(tasks);
-          renderProgressRing(tasks);
+          renderProgressPie(tasks);
           renderDeadlines(tasks);
 
           taskForm.reset();
@@ -111,15 +111,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function init() {
     renderUser();
     renderDate();
-    renderNotifBadge(notifications);
     fetchUserTasks();
     renderSummaryCards(tasks);
-    renderProgressRing(tasks);
+    renderProgressPie(tasks);
     renderDeadlines(tasks);
     renderTaskTable(tasks);
     renderTaskCards(tasks);
     renderSummaryCards(tasks);
-    renderProgressRing(tasks);
     renderDeadlines(tasks);
     initFilterButtons(tasks);
   }
@@ -158,8 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderDate() {
   }
 
-  function renderNotifBadge(notifications) {
-  }
+
   // Update summary cards -EP
   function renderSummaryCards(tasks) {
 
@@ -184,7 +181,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
-  function renderProgressRing(tasks) {
+  function renderProgressPie(allTasks) {
+    const total = allTasks.length;
+    const pieChartEl = document.getElementById("progressPieChart");
+    
+    if (!pieChartEl) return;
+
+    if (total === 0) {
+      pieChartEl.style.background = `conic-gradient(lightgray 0% 100%)`;
+      return;
+    }
+
+    const todoCount = allTasks.filter(t => (t.status === "todo" || !t.status)).length;
+    const progressCount = allTasks.filter(t => t.status === "in-progress").length;
+    const doneCount = allTasks.filter(t => t.status === "done").length;
+
+    const todoPct = (todoCount / total) * 100;
+    const progressPct = (progressCount / total) * 100;
+
+    const todoStop = todoPct;
+    const progressStop = todoStop + progressPct;
+
+    pieChartEl.style.background = `
+      conic-gradient(
+        red 0% ${todoStop}%,
+        dodgerblue ${todoStop}% ${progressStop}%,
+        limegreen ${progressStop}% 100%
+      )
+    `;
   }
 
   function renderDeadlines(tasks) {
@@ -329,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTaskTable(tasks);
         renderTaskCards(tasks);
         renderSummaryCards(tasks);
-        renderProgressRing(tasks);
+        renderProgressPie(tasks);
         renderDeadlines(tasks);
         document.getElementById("editModal").classList.add("hidden");
       } else {
@@ -389,7 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTaskTable(tasks);
         renderTaskCards(tasks);
         renderSummaryCards(tasks);
-        renderProgressRing(tasks);
+        renderProgressPie(tasks);
         renderDeadlines(tasks);
       } else {
         alert(data.message || "Failed to update task status.");
@@ -418,7 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTaskTable(tasks);
         renderTaskCards(tasks);
         renderSummaryCards(tasks);
-        renderProgressRing(tasks);
+        renderProgressPie(tasks);
         renderDeadlines(tasks);
         alert("Task deleted successfully.");
       } else {
@@ -456,3 +480,33 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+function renderProgressPie(allTasks) {
+    const total = allTasks.length;
+    const pieChartEl = document.getElementById("progressPieChart");
+    
+    if (!pieChartEl) return;
+
+    if (total === 0) {
+      pieChartEl.style.background = `conic-gradient(lightgray 0% 100%)`;
+      return;
+    }
+
+    const todoCount = allTasks.filter(t => (t.status === "todo" || t.status === "pending" || !t.status)).length;
+    const progressCount = allTasks.filter(t => (t.status === "in-progress" || t.status === "progress")).length;
+    const doneCount = allTasks.filter(t => (t.status === "done" || t.status === "completed")).length;
+
+    const todoPct = (todoCount / total) * 100;
+    const progressPct = (progressCount / total) * 100;
+
+    const todoStop = Math.round(todoPct);
+    const progressStop = Math.round(todoPct + progressPct);
+
+    pieChartEl.style.background = `
+      conic-gradient(
+        lightcoral 0% ${todoStop}%,
+        lightblue ${todoStop}% ${progressStop}%,
+        lightgreen ${progressStop}% 100%
+      )
+    `;
+  }

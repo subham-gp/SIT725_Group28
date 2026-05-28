@@ -14,104 +14,80 @@
 
 <body>
   <main class="main">
-
-    <header class="topbar">
+<header class="topbar">
       <div class="topbar-left">
-        <h1 class="page-title">Dashboard</h1>
+        <h1 class="page-title">Dashboard <span id="Dashboard"></span></h1>
         <p class="page-subtitle" id="currentDate"></p>
       </div>
-      <div class="topbar-search">
-    <div class="search-wrapper">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="globalSearchInput" placeholder="Search tasks by title or course..." />
-    </div>
-  </div>
+      
+      <!-- <div class="topbar-search">
+        <div class="search-wrapper">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="globalSearchInput" placeholder="Search tasks by title or course..." />
+        </div>
+      </div> -->
+      
       <div class="topbar-right">
         <button class="btn-add-task">
           <i class="fa-solid fa-plus"></i>
           New Task
         </button>
-        
+        <a href="login.html" class="action-btn delete topbar-nav-btn" id="logoutLink">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+        </a>
       </div>
-      <a href="login.html" class="action-btn delete" id="logoutLink" >
-      <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
-    </a>
-  </div>
     </header>
+<div class="top-dashboard-row">
 
-
-    <section class="summary-cards">
-      <div class="card card--total">
-        <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
-        <div class="card-body">
-          <span class="card-label">Total Tasks</span>
-          <span class="card-value" id="countTotal">—</span>
-        </div>
-        <div class="card-trend" id="trendTotal"></div>
+  <section class="summary-cards">
+    <div class="card card--total">
+      <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
+      <div class="card-body">
+        <span class="card-label">Total Tasks</span>
+        <span class="card-value" id="countTotal">4</span>
       </div>
+      <div class="card-trend" id="trendTotal"></div>
+    </div>
 
-      <div class="card card--pending">
-        <div class="card-icon"><i class="fa-solid fa-hourglass-start"></i></div>
-        <div class="card-body">
-          <span class="card-label">Pending</span>
-          <span class="card-value" id="countPending">—</span>
-        </div>
-        <div class="card-trend neutral">Not started yet</div>
+    <div class="card card--pending">
+      <div class="card-icon"><i class="fa-solid fa-hourglass-start"></i></div>
+      <div class="card-body">
+        <span class="card-label">Pending</span>
+        <span class="card-value" id="countPending">2</span>
       </div>
+      <div class="card-trend neutral">Not started yet</div>
+    </div>
 
-      <div class="card card--progress">
-        <div class="card-icon"><i class="fa-solid fa-spinner"></i></div>
-        <div class="card-body">
-          <span class="card-label">In Progress</span>
-          <span class="card-value" id="countProgress">—</span>
-        </div>
-        <div class="card-trend up"><i class="fa-solid fa-arrow-trend-up"></i> Active now</div>
+    <div class="card card--progress">
+      <div class="card-icon"><i class="fa-solid fa-spinner"></i></div>
+      <div class="card-body">
+        <span class="card-label">In Progress</span>
+        <span class="card-value" id="countProgress">1</span>
       </div>
+      <div class="card-trend up"><i class="fa-solid fa-arrow-trend-up"></i> Active now</div>
+    </div>
 
-      <div class="card card--completed">
-        <div class="card-icon"><i class="fa-solid fa-circle-check"></i></div>
-        <div class="card-body">
-          <span class="card-label">Completed</span>
-          <span class="card-value" id="countCompleted">—</span>
-        </div>
-        <div class="card-trend up" id="trendCompleted"></div>
+    <div class="card card--completed">
+      <div class="card-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="card-body">
+        <span class="card-label">Completed</span>
+        <span class="card-value" id="countCompleted">1</span>
       </div>
-    </section>
+      <div class="card-trend up" id="trendCompleted"></div>
+    </div>
+  </section>
 
-    <section class="mid-row">
+  <div class="panel panel--progress top-row-chart-panel">
+    <div class="panel-header">
+      <h2>Overall Progress</h2>
+      <span class="panel-badge">This Semester</span>
+    </div>
+    <div class="pie-chart-wrap">
+      <div class="real-pie-chart" id="progressPieChart"></div>
+    </div>
+  </div>
 
-      <div class="panel panel--progress">
-        <div class="panel-header">
-          <h2>Overall Progress</h2>
-          <span class="panel-badge">This Semester</span>
-        </div>
-        <div class="progress-ring-wrap">
-          <svg class="progress-ring" viewBox="0 0 120 120">
-            <circle class="ring-bg" cx="60" cy="60" r="50" />
-            <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50" stroke-dasharray="314"
-              stroke-dashoffset="314" />
-          </svg>
-          <div class="ring-label">
-            <span class="ring-pct" id="ringPct">—</span>
-            <span class="ring-sub">Complete</span>
-          </div>
-        </div>
-        <div class="progress-legend">
-          <div class="legend-item">
-            <span class="dot dot--completed"></span>Completed
-            <b id="legendCompleted">—</b>
-          </div>
-          <div class="legend-item">
-            <span class="dot dot--progress"></span>In Progress
-            <b id="legendProgress">—</b>
-          </div>
-          <div class="legend-item">
-            <span class="dot dot--pending"></span>Pending
-            <b id="legendPending">—</b>
-          </div>
-        </div>
-      </div>
-
+</div>
 
       <!-- <div class="panel panel--deadlines">
         <div class="panel-header">
