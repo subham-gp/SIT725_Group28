@@ -13,49 +13,6 @@
 </head>
 
 <body>
-
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span>
-      <span class="logo-text">TaskFlow</span>
-    </div>
-
-    <nav class="sidebar-nav">
-      <a href="#" class="nav-item active">
-        <i class="fa-solid fa-gauge-high"></i>
-        <span>Dashboard</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-list-check"></i>
-        <span>My Tasks</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-calendar-days"></i>
-        <span>Deadlines</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <span>Search</span>
-      </a>
-      <a href="#" class="nav-item">
-        <i class="fa-solid fa-user"></i>
-        <span>Profile</span>
-      </a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="user-avatar" id="sidebarAvatar"></div>
-        <div class="user-info">
-          <span class="user-name" id="sidebarUsername"></span>
-          <span class="user-role">Student</span>
-        </div>
-      </div>
-      <a href="#" class="logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-    </div>
-  </aside>
-
-
   <main class="main">
 
     <header class="topbar">
@@ -63,16 +20,23 @@
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle" id="currentDate"></p>
       </div>
+      <div class="topbar-search">
+    <div class="search-wrapper">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="globalSearchInput" placeholder="Search tasks by title or course..." />
+    </div>
+  </div>
       <div class="topbar-right">
         <button class="btn-add-task">
           <i class="fa-solid fa-plus"></i>
           New Task
         </button>
-        <button class="notif-btn">
-          <i class="fa-solid fa-bell"></i>
-          <span class="notif-badge" id="notifCount"></span>
-        </button>
+        
       </div>
+      <a href="login.html" class="action-btn delete" id="logoutLink" >
+      <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+    </a>
+  </div>
     </header>
 
 
@@ -149,7 +113,7 @@
       </div>
 
 
-      <div class="panel panel--deadlines">
+      <!-- <div class="panel panel--deadlines">
         <div class="panel-header">
           <h2>Upcoming Deadlines</h2>
           <a href="#" class="panel-link">View all</a>
@@ -158,7 +122,7 @@
         <ul class="deadline-list" id="deadlineList">
           <li class="empty-state">No upcoming deadlines</li>
         </ul>
-      </div>
+      </div> -->
 
     </section>
 
