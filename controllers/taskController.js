@@ -73,7 +73,7 @@ exports.updateTask = async (req, res) => {
                 priority,
                 status
             },
-            { returnDocument: 'after', runValidators: true }    //validation checks when editing/updating the tasks. -SG
+            { new: true }
         );
 
         if (!updatedTask) {
@@ -83,9 +83,8 @@ exports.updateTask = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: 'Task updated successfully',
-            task: updatedTask
-        });
-    } catch (error) {
+            task: updatedTask});
+       } catch (error) {
         console.error("Backend Task Update Error:", error);
         return res.status(500).json({ success: false, message: 'Internal Server Error Updating Task' });
     }
@@ -93,34 +92,34 @@ exports.updateTask = async (req, res) => {
 
 // DELETE TASK
 exports.deleteTask = async (req, res) => {
-    try {
-        const taskId = req.params.id;
+  try {
+    const taskId = req.params.id;
 
-        if (!mongoose.Types.ObjectId.isValid(taskId)) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid task ID'
-            });
-        }
-
-        const deletedTask = await Task.findByIdAndDelete(taskId);
-
-        if (!deletedTask) {
-            return res.status(404).json({
-                success: false,
-                message: 'Task not found'
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: 'Task deleted successfully'
-        });
-    } catch (error) {
-        console.error('Delete task error:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Server error'
-        });
+    if (!mongoose.Types.ObjectId.isValid(taskId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid task ID'
+      });
     }
+
+    const deletedTask = await Task.findByIdAndDelete(taskId);
+
+    if (!deletedTask) {
+      return res.status(404).json({
+        success: false,
+        message: 'Task not found'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Task deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete task error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
 };

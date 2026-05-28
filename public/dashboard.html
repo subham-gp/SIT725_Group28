@@ -168,9 +168,9 @@
         <h2>Recent Tasks</h2>
         <div class="task-filters">
           <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="todo">Pending</button>
-          <button class="filter-btn" data-filter="in-progress">In Progress</button>
-          <button class="filter-btn" data-filter="done">Completed</button>
+          <button class="filter-btn" data-filter="pending">Pending</button>
+          <button class="filter-btn" data-filter="progress">In Progress</button>
+          <button class="filter-btn" data-filter="completed">Completed</button>
 
           <select id="sortSelect">
             <option value="default">Sort by...</option>
@@ -276,26 +276,6 @@
         <button type="submit" class="submit-btn">Save Changes</button>
       </form>
     </div>
-    <form id="editForm">
-      <input type="hidden" id="editTaskId" />
-      <input type="text" id="editTitle" placeholder="Task title" required />
-      <input type="text" id="editCourse" placeholder="Course / Unit" />
-      <textarea id="editDescription" placeholder="Description"></textarea>
-      <input type="date" id="editDueDate" />
-      <select id="editPriority">
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-
-      </select>
-      <select id="editStatus">
-        <option value="todo">To Do</option>
-        <option value="in-progress">In Progress</option>
-        <option value="done">Completed</option>
-      </select>
-      
-      <button type="submit" class="submit-btn">Save Changes</button>
-    </form>
   </div>
 
 </body>
