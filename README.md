@@ -16,3 +16,19 @@ This is a web-based Student Task Management System designed to help university s
 - Backend: Node.js, Express.js
 - Database: MongoDB
 - Version Control: Git & GitHub
+
+## Basic Setup Instructions
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/subham-gp/SIT725_Group28.git
+
+2. Install dependencies:
+   -- npm install
+   
+4. Start MongoDB locally.
+
+5. Run the application:
+   -- npm start
+
+6. Open the app in the browser:
+   http://localhost:3000
