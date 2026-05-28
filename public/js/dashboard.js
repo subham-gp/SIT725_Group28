@@ -122,6 +122,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   init();
 
+  // ─── SORTING ───────────────────────────────────────────
+
+  const priorityOrder = { high: 1, medium: 2, low: 3 };
+
+  function sortTasks(tasks, sortBy) {
+    const sorted = [...tasks];
+    if (sortBy === "dueDate") {
+      sorted.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    } else if (sortBy === "priority") {
+      sorted.sort((a, b) => (priorityOrder[a.priority] || 99) - (priorityOrder[b.priority] || 99));
+    }
+    return sorted;
+  }
+
+  const sortSelect = document.getElementById("sortSelect");
+  if (sortSelect) {
+    sortSelect.addEventListener("change", () => {
+      const sorted = sortTasks(tasks, sortSelect.value);
+      renderTaskTable(sorted);
+    });
+  }
+
   function renderUser(user) {
     const welcomeEl = document.querySelector(".topbar-user h1");
     if (welcomeEl) {
@@ -236,12 +258,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const id = document.getElementById("editTaskId").value;
 
     const updated = {
-      title:       document.getElementById("editTitle").value,
-      course:      document.getElementById("editCourse").value,
+      title: document.getElementById("editTitle").value,
+      course: document.getElementById("editCourse").value,
       description: document.getElementById("editDescription").value,
-      dueDate:     document.getElementById("editDueDate").value,
-      priority:    document.getElementById("editPriority").value,
-      status:      document.getElementById("editStatus").value,
+      dueDate: document.getElementById("editDueDate").value,
+      priority: document.getElementById("editPriority").value,
+      status: document.getElementById("editStatus").value,
     };
 
     try {
@@ -273,14 +295,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const task = tasks.find(t => t._id === id);
     if (!task) return;
 
-    document.getElementById("editTaskId").value      = task._id;
-    document.getElementById("editTitle").value       = task.title;
-    document.getElementById("editCourse").value      = task.course || "";
+    document.getElementById("editTaskId").value = task._id;
+    document.getElementById("editTitle").value = task.title;
+    document.getElementById("editCourse").value = task.course || "";
     document.getElementById("editDescription").value = task.description || "";
-    document.getElementById("editDueDate").value     = task.dueDate
+    document.getElementById("editDueDate").value = task.dueDate
       ? new Date(task.dueDate).toISOString().split("T")[0] : "";
-    document.getElementById("editPriority").value    = task.priority || "medium";
-    document.getElementById("editStatus").value      = task.status || "todo";
+    document.getElementById("editPriority").value = task.priority || "medium";
+    document.getElementById("editStatus").value = task.status || "todo";
 
     document.getElementById("editModal").classList.remove("hidden");
   };
