@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        tasks = data.tasks;        //overwrite our empty tasks array with the database records
+        tasks = data.tasks.reverse();        //overwrite our empty tasks array with the database records
         renderTaskTable(tasks);    //redraws our table layout with the fresh data
         renderTaskCards(tasks);
         renderSummaryCards(tasks);
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (response.ok && data.success) {
           //add the newly saved MongoDB task object
-          tasks.push(data.task);
+          tasks.unshift(data.task);
 
           //updating the dashboard table
           renderTaskTable(tasks);
@@ -173,7 +173,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //If MongoDB returns no tasks, show the empty layout state
     if (tasks.length === 0) {
-      taskTableBody.innerHTML = `<tr><td colspan="6" class="empty-state">No tasks found</td></tr>`;
+      taskTableBody.innerHTML =
+        `<tr>
+      <td colspan="6" class="empty-state">No tasks found</td>
+    </tr>`;
       return;
     }
 
@@ -186,8 +189,28 @@ document.addEventListener("DOMContentLoaded", () => {
       <td>${escapeHtml(task.course || 'General')}</td>
       <td>${task.dueDate ? formatDate(task.dueDate) : "-"}</td>
       <td><span class="priority-badge ${task.priority}">${task.priority.toUpperCase()}</span></td>
-      <td><span class="status-badge ${task.status || 'todo'}">${(task.status || 'todo').toUpperCase()}</span></td>
-      <td>
+<td>
+  <select class="status-select ${task.status || 'todo'}"
+    onchange="handleStatusChange('${task._id}', this.value)">
+
+    <option value="todo"
+      ${(task.status || "todo") === "todo" ? "selected" : ""}>
+      Pending
+    </option>
+
+    <option value="in-progress"
+      ${task.status === "in-progress" ? "selected" : ""}>
+      In Progress
+    </option>
+
+    <option value="done"
+      ${task.status === "done" ? "selected" : ""}>
+      Completed
+    </option>
+
+  </select>
+</td>      
+<td>
         <button class="action-btn edit" onclick="handleEdit('${task._id}')">Edit</button>
         <button class="action-btn delete" onclick="handleDelete('${task._id}')">Delete</button>
       </td>
@@ -212,8 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     tasks.forEach(task => {
 
       const card = document.createElement("div");
-      card.className = "task-card";
-
+      card.className = task.status === "done" ? "task-card completed-task" : "task-card";
       card.innerHTML = `
       <h3>${escapeHtml(task.title)}</h3>
 
@@ -230,12 +252,13 @@ document.addEventListener("DOMContentLoaded", () => {
       </p>
 
       <p>
-        <strong>Status:</strong>
-        <span class="status-badge ${task.status || "todo"}">
-          ${(task.status || "todo").toUpperCase()}
-        </span>
-      </p>
-    `;
+         <strong>Status:</strong>
+         <select class="status-select ${task.status || "todo"}" onchange="handleStatusChange('${task._id}', this.value)">
+         <option value="todo" ${(task.status || "todo") === "todo" ? "selected" : ""}>Pending</option>
+         <option value="in-progress" ${task.status === "in-progress" ? "selected" : ""}>In Progress</option>
+         <option value="done" ${task.status === "done" ? "selected" : ""}>Completed</option>
+         </select>
+      </p>`;
 
       taskCardContainer.appendChild(card);
     });
@@ -308,6 +331,47 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ─────────────────────────────────────────────────────
+  // Status change function EP
+  window.handleStatusChange = async function (id, newStatus) {
+    const task = tasks.find(t => t._id === id);
+    if (!task) return;
+
+    const updated = {
+      title: task.title,
+      course: task.course || "General",
+      description: task.description || "",
+      dueDate: task.dueDate,
+      priority: task.priority || "medium",
+      status: newStatus
+    };
+
+    try {
+      const response = await fetch(`/api/auth/tasks/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated)
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        const index = tasks.findIndex(t => t._id === id);
+        if (index !== -1) tasks[index] = data.task;
+
+        renderTaskTable(tasks);
+        renderTaskCards(tasks);
+        renderSummaryCards(tasks);
+        renderProgressRing(tasks);
+        renderDeadlines(tasks);
+      } else {
+        alert(data.message || "Failed to update task status.");
+      }
+    } catch (error) {
+      console.error("Status update error:", error);
+      alert("Something went wrong updating the task status.");
+    }
+  };
+  //---------------------------
 
   window.handleDelete = async function (id) {
   const confirmDelete = confirm("Are you sure you want to delete this task?");
