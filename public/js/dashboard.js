@@ -243,7 +243,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  window.handleDelete = function (id) { };
+ window.handleDelete = async function (id) {
+  const confirmDelete = confirm("Are you sure you want to delete this task?");
+
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(`/api/auth/tasks/${id}`, {
+      method: "DELETE"
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      tasks = tasks.filter(task => task._id !== id);
+      renderTaskTable(tasks);
+      alert("Task deleted successfully.");
+    } else {
+      alert(data.message || "Failed to delete task.");
+    }
+  } catch (error) {
+    console.error("Delete task error:", error);
+    alert("Something went wrong deleting the task.");
+  }
+};
 
   function setText(id, value) {
     const el = document.getElementById(id);

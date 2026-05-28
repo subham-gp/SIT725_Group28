@@ -11,4 +11,7 @@ router.post('/register', authController.register);  //SG
 router.post('/tasks/create', taskController.createTask);
 router.get('/tasks', taskController.getTasks);
 
+
+//Delete 
+router.delete('/tasks/:id', taskController.deleteTask);
 module.exports = router;
