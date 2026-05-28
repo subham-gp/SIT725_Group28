@@ -174,7 +174,74 @@ document.addEventListener("DOMContentLoaded", () => {
   function initFilterButtons(tasks) {
   }
 
-  window.handleEdit = function (id) { };
+  window.handleEdit = function (id) {
+    // Open edit modal and pre-fill with task data
+    window.handleEdit = function (id) {
+      const task = tasks.find(t => t._id === id);
+      if (!task) return;
+
+      // Pre-fill the form fields with existing task data
+      document.getElementById("editTaskId").value = task._id;
+      document.getElementById("editTitle").value = task.title;
+      document.getElementById("editCourse").value = task.course || "";
+      document.getElementById("editDescription").value = task.description || "";
+      document.getElementById("editDueDate").value = task.dueDate
+        ? new Date(task.dueDate).toISOString().split("T")[0]
+        : "";
+      document.getElementById("editPriority").value = task.priority || "low";
+      document.getElementById("editStatus").value = task.status || "todo";
+
+      document.getElementById("editModal").classList.remove("hidden");
+    };
+
+    // Close edit modal
+    document.getElementById("closeEditModal").addEventListener("click", () => {
+      document.getElementById("editModal").classList.add("hidden");
+    });
+    document.getElementById("cancelEdit").addEventListener("click", () => {
+      document.getElementById("editModal").classList.add("hidden");
+    });
+
+    // Save edited task → PUT /api/auth/tasks/:id
+    document.getElementById("editForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const id = document.getElementById("editTaskId").value;
+
+      const updated = {
+        title: document.getElementById("editTitle").value,
+        course: document.getElementById("editCourse").value,
+        description: document.getElementById("editDescription").value,
+        dueDate: document.getElementById("editDueDate").value,
+        priority: document.getElementById("editPriority").value,
+        status: document.getElementById("editStatus").value,
+      };
+
+      try {
+        const response = await fetch(`/api/auth/tasks/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updated),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Update the local tasks array so table re-renders without a page reload
+          const index = tasks.findIndex(t => t._id === id);
+          if (index !== -1) tasks[index] = data.task;
+
+          renderTaskTable(tasks);
+          document.getElementById("editModal").classList.add("hidden");
+        } else {
+          alert(data.message || "Failed to update task.");
+        }
+      } catch (error) {
+        console.error("Edit submission error:", error);
+        alert("Something went wrong updating the task.");
+      }
+    });
+  };
 
   window.handleDelete = function (id) { };
 
@@ -203,4 +270,4 @@ document.addEventListener("DOMContentLoaded", () => {
     return div.innerHTML;
   }
 
-});
+});// Add edit function test
