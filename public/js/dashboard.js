@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const openBtn = document.querySelector(".btn-add-task");
   const closeBtn = document.getElementById("closeModal");
 
-  // Task creation MODAL open & close
+  // Task creation MODAL open & close - EP
   if (openBtn && modal) {
     openBtn.addEventListener("click", () => {
       modal.classList.remove("hidden");
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Task Creation
+  // Task Creation EP
   if (taskForm) {
     taskForm.addEventListener("submit", async function (e) {
       e.preventDefault();
@@ -91,6 +91,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
           //updating the dashboard table
           renderTaskTable(tasks);
+          renderTaskCards(tasks);
+          renderSummaryCards(tasks);
+          renderProgressRing(tasks);
+          renderDeadlines(tasks);
 
           taskForm.reset();
           modal.classList.add("hidden");
@@ -156,8 +160,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderNotifBadge(notifications) {
   }
-
+  // Update summary cards -EP
   function renderSummaryCards(tasks) {
+
+    const totalTasks = tasks.length;
+
+    const pendingTasks = tasks.filter(
+      task => task.status === "todo"
+    ).length;
+
+    const progressTasks = tasks.filter(
+      task => task.status === "in-progress"
+    ).length;
+
+    const completedTasks = tasks.filter(
+      task => task.status === "done"
+    ).length;
+
+    setText("countTotal", totalTasks);
+    setText("countPending", pendingTasks);
+    setText("countProgress", progressTasks);
+    setText("countCompleted", completedTasks);
+
   }
 
   function renderProgressRing(tasks) {
@@ -303,6 +327,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (index !== -1) tasks[index] = data.task;
 
         renderTaskTable(tasks);
+        renderTaskCards(tasks);
+        renderSummaryCards(tasks);
+        renderProgressRing(tasks);
+        renderDeadlines(tasks);
         document.getElementById("editModal").classList.add("hidden");
       } else {
         alert(data.message || "Failed to update task.");
@@ -374,29 +402,33 @@ document.addEventListener("DOMContentLoaded", () => {
   //---------------------------
 
   window.handleDelete = async function (id) {
-  const confirmDelete = confirm("Are you sure you want to delete this task?");
+    const confirmDelete = confirm("Are you sure you want to delete this task?");
 
-  if (!confirmDelete) return;
+    if (!confirmDelete) return;
 
-  try {
-    const response = await fetch(`/api/auth/tasks/${id}`, {
-      method: "DELETE"
-    });
+    try {
+      const response = await fetch(`/api/auth/tasks/${id}`, {
+        method: "DELETE"
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok && data.success) {
-      tasks = tasks.filter(task => task._id !== id);
-      renderTaskTable(tasks);
-      alert("Task deleted successfully.");
-    } else {
-      alert(data.message || "Failed to delete task.");
+      if (response.ok && data.success) {
+        tasks = tasks.filter(task => task._id !== id);
+        renderTaskTable(tasks);
+        renderTaskCards(tasks);
+        renderSummaryCards(tasks);
+        renderProgressRing(tasks);
+        renderDeadlines(tasks);
+        alert("Task deleted successfully.");
+      } else {
+        alert(data.message || "Failed to delete task.");
+      }
+    } catch (error) {
+      console.error("Delete task error:", error);
+      alert("Something went wrong deleting the task.");
     }
-  } catch (error) {
-    console.error("Delete task error:", error);
-    alert("Something went wrong deleting the task.");
-  }
-};
+  };
 
   function setText(id, value) {
     const el = document.getElementById(id);
