@@ -240,41 +240,36 @@
     </div>
 
   </div>
+</body>
+
+</html>
   <!-- EDIT MODAL -->
-<div id="editModal" class="modal hidden">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Edit Task</h2>
-      <button id="closeEditModal" class="close-btn">&times;</button>
+  <div id="editModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Task</h2>
+        <button id="closeEditModal" class="close-btn">&times;</button>
+      </div>
+      <form id="editForm">
+        <input type="hidden" id="editTaskId" />
+        <input type="text" id="editTitle" placeholder="Task title" required />
+        <input type="text" id="editCourse" placeholder="Course / Unit" />
+        <textarea id="editDescription" placeholder="Description"></textarea>
+        <input type="date" id="editDueDate" />
+        <select id="editPriority">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+        <select id="editStatus">
+          <option value="todo">To Do</option>
+          <option value="progress">In Progress</option>
+          <option value="completed">Completed</option>
+        </select>
+        <button type="submit" class="submit-btn">Save Changes</button>
+      </form>
     </div>
-
-    <form id="editForm">
-      <input type="hidden" id="editTaskId" />
-
-      <input type="text" id="editTitle" placeholder="Task title" required />
-
-      <input type="text" id="editCourse" placeholder="Course / Unit" />
-
-      <textarea id="editDescription" placeholder="Description"></textarea>
-
-      <input type="date" id="editDueDate" />
-
-      <select id="editPriority">
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-
-      <select id="editStatus">
-        <option value="todo">To Do</option>
-        <option value="in-progress">In Progress</option>
-        <option value="done">Completed</option>
-      </select>
-
-      <button type="submit" class="submit-btn">Save Changes</button>
-    </form>
   </div>
-</div>
 </body>
 
 </html>
