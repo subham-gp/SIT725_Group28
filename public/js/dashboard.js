@@ -108,9 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderUser();
     renderDate();
     renderNotifBadge(notifications);
-
     fetchUserTasks();
-
     renderSummaryCards(tasks);
     renderProgressRing(tasks);
     renderDeadlines(tasks);
@@ -131,24 +129,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
   function renderDate() {
   }
 
   function renderNotifBadge(notifications) {
   }
 
-
   function renderSummaryCards(tasks) {
   }
-
 
   function renderProgressRing(tasks) {
   }
 
   function renderDeadlines(tasks) {
   }
-
 
   //moved the taskTableBody here and added a loop -SG
   function renderTaskTable(tasks, filter = "all") {
@@ -228,74 +222,70 @@ document.addEventListener("DOMContentLoaded", () => {
   function initFilterButtons(tasks) {
   }
 
-  window.handleEdit = function (id) {
-    // Open edit modal and pre-fill with task data
-    window.handleEdit = function (id) {
-      const task = tasks.find(t => t._id === id);
-      if (!task) return;
+  // ─── EDIT MODAL ───────────────────────────────────────
 
-      // Pre-fill the form fields with existing task data
-      document.getElementById("editTaskId").value = task._id;
-      document.getElementById("editTitle").value = task.title;
-      document.getElementById("editCourse").value = task.course || "";
-      document.getElementById("editDescription").value = task.description || "";
-      document.getElementById("editDueDate").value = task.dueDate
-        ? new Date(task.dueDate).toISOString().split("T")[0]
-        : "";
-      document.getElementById("editPriority").value = task.priority || "low";
-      document.getElementById("editStatus").value = task.status || "todo";
+  // Close edit modal
+  document.getElementById("closeEditModal").addEventListener("click", () => {
+    document.getElementById("editModal").classList.add("hidden");
+  });
 
-      document.getElementById("editModal").classList.remove("hidden");
+  // Save edited task → PUT /api/auth/tasks/:id
+  document.getElementById("editForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById("editTaskId").value;
+
+    const updated = {
+      title:       document.getElementById("editTitle").value,
+      course:      document.getElementById("editCourse").value,
+      description: document.getElementById("editDescription").value,
+      dueDate:     document.getElementById("editDueDate").value,
+      priority:    document.getElementById("editPriority").value,
+      status:      document.getElementById("editStatus").value,
     };
 
-    // Close edit modal
-    document.getElementById("closeEditModal").addEventListener("click", () => {
-      document.getElementById("editModal").classList.add("hidden");
-    });
-    document.getElementById("cancelEdit").addEventListener("click", () => {
-      document.getElementById("editModal").classList.add("hidden");
-    });
+    try {
+      const response = await fetch(`/api/auth/tasks/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
 
-    // Save edited task → PUT /api/auth/tasks/:id
-    document.getElementById("editForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
+      const data = await response.json();
 
-      const id = document.getElementById("editTaskId").value;
+      if (response.ok && data.success) {
+        const index = tasks.findIndex(t => t._id === id);
+        if (index !== -1) tasks[index] = data.task;
 
-      const updated = {
-        title: document.getElementById("editTitle").value,
-        course: document.getElementById("editCourse").value,
-        description: document.getElementById("editDescription").value,
-        dueDate: document.getElementById("editDueDate").value,
-        priority: document.getElementById("editPriority").value,
-        status: document.getElementById("editStatus").value,
-      };
-
-      try {
-        const response = await fetch(`/api/auth/tasks/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updated),
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          // Update the local tasks array so table re-renders without a page reload
-          const index = tasks.findIndex(t => t._id === id);
-          if (index !== -1) tasks[index] = data.task;
-
-          renderTaskTable(tasks);
-          document.getElementById("editModal").classList.add("hidden");
-        } else {
-          alert(data.message || "Failed to update task.");
-        }
-      } catch (error) {
-        console.error("Edit submission error:", error);
-        alert("Something went wrong updating the task.");
+        renderTaskTable(tasks);
+        document.getElementById("editModal").classList.add("hidden");
+      } else {
+        alert(data.message || "Failed to update task.");
       }
-    });
+    } catch (error) {
+      console.error("Edit submission error:", error);
+      alert("Something went wrong updating the task.");
+    }
+  });
+
+  // Open edit modal and pre-fill fields
+  window.handleEdit = function (id) {
+    const task = tasks.find(t => t._id === id);
+    if (!task) return;
+
+    document.getElementById("editTaskId").value      = task._id;
+    document.getElementById("editTitle").value       = task.title;
+    document.getElementById("editCourse").value      = task.course || "";
+    document.getElementById("editDescription").value = task.description || "";
+    document.getElementById("editDueDate").value     = task.dueDate
+      ? new Date(task.dueDate).toISOString().split("T")[0] : "";
+    document.getElementById("editPriority").value    = task.priority || "medium";
+    document.getElementById("editStatus").value      = task.status || "todo";
+
+    document.getElementById("editModal").classList.remove("hidden");
   };
+
+  // ─────────────────────────────────────────────────────
 
   window.handleDelete = function (id) { };
 
@@ -324,4 +314,4 @@ document.addEventListener("DOMContentLoaded", () => {
     return div.innerHTML;
   }
 
-});// Add edit function test
+});

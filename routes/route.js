@@ -10,5 +10,6 @@ router.post('/register', authController.register);  //SG
 //task management endpoints -SG
 router.post('/tasks/create', taskController.createTask);
 router.get('/tasks', taskController.getTasks);
+router.put('/tasks/:id', taskController.updateTask);
 
 module.exports = router;
