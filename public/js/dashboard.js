@@ -122,6 +122,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   init();
 
+  // ─── SORTING ───────────────────────────────────────────
+
+  const priorityOrder = { high: 1, medium: 2, low: 3 };
+
+  function sortTasks(tasks, sortBy) {
+    const sorted = [...tasks];
+    if (sortBy === "dueDate") {
+      sorted.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+    } else if (sortBy === "priority") {
+      sorted.sort((a, b) => (priorityOrder[a.priority] || 99) - (priorityOrder[b.priority] || 99));
+    }
+    return sorted;
+  }
+
+  const sortSelect = document.getElementById("sortSelect");
+  if (sortSelect) {
+    sortSelect.addEventListener("change", () => {
+      const sorted = sortTasks(tasks, sortSelect.value);
+      renderTaskTable(sorted);
+    });
+  }
+
   function renderUser(user) {
     const welcomeEl = document.querySelector(".topbar-user h1");
     if (welcomeEl) {
@@ -351,7 +373,30 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   //---------------------------
 
-  window.handleDelete = function (id) { };
+  window.handleDelete = async function (id) {
+  const confirmDelete = confirm("Are you sure you want to delete this task?");
+
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(`/api/auth/tasks/${id}`, {
+      method: "DELETE"
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      tasks = tasks.filter(task => task._id !== id);
+      renderTaskTable(tasks);
+      alert("Task deleted successfully.");
+    } else {
+      alert(data.message || "Failed to delete task.");
+    }
+  } catch (error) {
+    console.error("Delete task error:", error);
+    alert("Something went wrong deleting the task.");
+  }
+};
 
   function setText(id, value) {
     const el = document.getElementById(id);

@@ -283,3 +283,26 @@ input, textarea, select {
   text-decoration: line-through;
   color: #64748b;
 }
+
+.action-btn {
+  border: none;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 13px;
+}
+
+.action-btn.edit {
+  background: #2563eb;
+  color: white;
+}
+
+.action-btn.delete {
+  background: #dc2626;
+  color: white;
+}
+
+.action-btn.delete:hover {
+  background: #b91c1c;
+}
