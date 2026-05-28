@@ -45,6 +45,8 @@ body {
 .main {
   flex: 1;
   padding: 25px;
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 /* TOPBAR */
@@ -77,12 +79,24 @@ body {
   border-radius: 12px;
 }
 
+.card-value {
+  display: block;
+  font-size: 32px;
+  font-weight: 800;
+  margin-top: 8px;
+  color: #2563eb;
+}
+
 /* PANELS */
 .panel {
   background: white;
   padding: 15px;
   margin-top: 20px;
   border-radius: 12px;
+}
+.panel--tasks {
+  max-width: 100%;
+  overflow: hidden;
 }
 
 /* TABLE */
@@ -154,18 +168,36 @@ input, textarea, select {
 /* TASK CARDS */
 
 .task-card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  display: flex;
   gap: 16px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  max-width: 100%;
+  width: 100%;
+
+  padding-bottom: 10px;
   margin-bottom: 20px;
+
+  box-sizing: border-box;
+}
+
+/* scrollbar styling */
+.task-card-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.task-card-grid::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
 }
 
 .task-card {
-  background: #c8ccea;
-  border-radius: 14px;
-  padding: 18px;
-  border-left: 5px solid #466fc9;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  min-width: 260px;
+  max-width: 260px;
+
+  flex-shrink: 0;
 }
 
 .task-card h3 {
@@ -224,6 +256,42 @@ input, textarea, select {
   background: #dcfce7;
   color: #166534;
 }
+
+.status-select {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.status-select.todo {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.status-select.in-progress {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.status-select.done {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.task-card.completed-task {
+  background: #f0fdf4;
+  border-left-color: #22c55e;
+  opacity: 0.9;
+}
+
+.task-card.completed-task h3 {
+  text-decoration: line-through;
+  color: #64748b;
+}
+
 .action-btn {
   border: none;
   padding: 7px 10px;
