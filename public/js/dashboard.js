@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const taskForm = document.getElementById("taskForm");
   const taskTableBody = document.getElementById("taskTableBody");
+  const taskCardContainer = document.getElementById("taskCardContainer");
   const modal = document.getElementById("taskModal");
 
   const openBtn = document.querySelector(".btn-add-task");
@@ -44,6 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok && data.success) {
         tasks = data.tasks;        //overwrite our empty tasks array with the database records
         renderTaskTable(tasks);    //redraws our table layout with the fresh data
+        renderTaskCards(tasks);
+        renderSummaryCards(tasks);
+        renderProgressRing(tasks);
+        renderDeadlines(tasks);
       } else {
         console.error("Failed to load tasks from database:", data.message);
       }
@@ -110,6 +115,10 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProgressRing(tasks);
     renderDeadlines(tasks);
     renderTaskTable(tasks);
+    renderTaskCards(tasks);
+    renderSummaryCards(tasks);
+    renderProgressRing(tasks);
+    renderDeadlines(tasks);
     initFilterButtons(tasks);
   }
 
@@ -168,6 +177,51 @@ document.addEventListener("DOMContentLoaded", () => {
       </td>
     `;
       taskTableBody.appendChild(row);
+    });
+  }
+  //Render Task cards 
+  function renderTaskCards(tasks) {
+
+    if (!taskCardContainer) return;
+
+    taskCardContainer.innerHTML = "";
+
+    if (tasks.length === 0) {
+      taskCardContainer.innerHTML = `
+      <p class="empty-state">No task cards available</p>
+    `;
+      return;
+    }
+
+    tasks.forEach(task => {
+
+      const card = document.createElement("div");
+      card.className = "task-card";
+
+      card.innerHTML = `
+      <h3>${escapeHtml(task.title)}</h3>
+
+      <p><strong>Course:</strong> ${escapeHtml(task.course || "General")}</p>
+
+      <p><strong>Due:</strong> ${task.dueDate ? formatDate(task.dueDate) : "-"
+        }</p>
+
+      <p>
+        <strong>Priority:</strong>
+        <span class="priority-badge ${task.priority}">
+          ${task.priority.toUpperCase()}
+        </span>
+      </p>
+
+      <p>
+        <strong>Status:</strong>
+        <span class="status-badge ${task.status || "todo"}">
+          ${(task.status || "todo").toUpperCase()}
+        </span>
+      </p>
+    `;
+
+      taskCardContainer.appendChild(card);
     });
   }
 
