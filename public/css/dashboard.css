@@ -5,41 +5,6 @@ body {
   display: flex;
 }
 
-/* SIDEBAR */
-.sidebar {
-  width: 240px;
-  background: #252e41;
-  color: white;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-}
-
-.sidebar-logo {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 30px;
-}
-
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.nav-item {
-  color: #cbd5e1;
-  text-decoration: none;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.nav-item.active,
-.nav-item:hover {
-  background: #5695ec;
-  color: white;
-}
 
 /* MAIN */
 .main {
@@ -65,6 +30,13 @@ body {
   cursor: pointer;
 }
 
+.topbar-nav-btn {
+  text-decoration: none;
+  padding: 10px 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
 /* CARDS */
 .summary-cards {
   display: grid;
@@ -314,3 +286,4 @@ input, textarea, select {
 .action-btn.delete:hover {
   background: #b91c1c;
 }
+
