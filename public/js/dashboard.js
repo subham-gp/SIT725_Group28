@@ -44,8 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok && data.success) {
         tasks = data.tasks.reverse();        //overwrite our empty tasks array with the database records
-        renderTaskTable(tasks);    //redraws our table layout with the fresh data
-        renderTaskCards(tasks);
+
+        const activeFilter = document.querySelector(".task-filters .filter-btn.active")?.getAttribute("data-filter") || "all";
+
+        renderTaskTable(tasks, activeFilter);             //redraws our table layout with the fresh data
+        renderTaskCards(tasks, activeFilter);
         renderSummaryCards(tasks);
         renderProgressPie(tasks);
         renderDeadlines(tasks);
@@ -74,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            user: currentUserId, //links the task to this logged-in user
+            user: currentUserId,  //links the task to this logged-in user
             title,
             course,
             description,
@@ -120,6 +123,11 @@ document.addEventListener("DOMContentLoaded", () => {
     renderSummaryCards(tasks);
     renderDeadlines(tasks);
     initFilterButtons(tasks);
+    renderNotifBadge(notifications);
+
+    fetchUserTasks();
+
+    initFilterButtons();
   }
 
   init();
@@ -156,6 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderDate() {
   }
 
+  function renderNotifBadge(notifications) {
+  }
 
   // Update summary cards -EP
   function renderSummaryCards(tasks) {
@@ -219,8 +229,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!taskTableBody) return;
     taskTableBody.innerHTML = "";
 
+    let dbFilter = filter;
+    if (filter === "pending") dbFilter = "todo";
+    if (filter === "progress") dbFilter = "in-progress";
+    if (filter === "completed") dbFilter = "done";
+
+    //filering by task status
+    const filteredTasks = dbFilter === "all" ? tasks : tasks.filter(task => task.status === dbFilter);
+
     //If MongoDB returns no tasks, show the empty layout state
-    if (tasks.length === 0) {
+    if (filteredTasks.length === 0) {
+      const displayLabel = filter === 'pending' ? 'pending' : filter === 'progress' ? 'in progress' : 'completed';
       taskTableBody.innerHTML =
         `<tr>
       <td colspan="6" class="empty-state">No tasks found</td>
@@ -229,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     //Loop through the database items and paint them to the screen -SG
-    tasks.forEach(task => {
+    filteredTasks.forEach(task => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
@@ -266,21 +285,29 @@ document.addEventListener("DOMContentLoaded", () => {
       taskTableBody.appendChild(row);
     });
   }
+
   //Render Task cards 
-  function renderTaskCards(tasks) {
+  function renderTaskCards(tasks, filter = "all") {
 
     if (!taskCardContainer) return;
 
     taskCardContainer.innerHTML = "";
 
-    if (tasks.length === 0) {
+    let dbFilter = filter;
+    if (filter === "pending") dbFilter = "todo";
+    if (filter === "progress") dbFilter = "in-progress";
+    if (filter === "completed") dbFilter = "done";
+
+    const filteredTasks = dbFilter === "all" ? tasks : tasks.filter(task => task.status === dbFilter);
+
+    if (filteredTasks.length === 0) {
       taskCardContainer.innerHTML = `
       <p class="empty-state">No task cards available</p>
     `;
       return;
     }
 
-    tasks.forEach(task => {
+    filteredTasks.forEach(task => {
 
       const card = document.createElement("div");
       card.className = task.status === "done" ? "task-card completed-task" : "task-card";
@@ -312,7 +339,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function initFilterButtons(tasks) {
+  function initFilterButtons() {
+    const filterButtons = document.querySelectorAll(".task-filters .filter-btn");
+
+    filterButtons.forEach(button => {
+      button.addEventListener("click", (e) => {
+
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+
+        const clickedButton = e.currentTarget;
+        clickedButton.classList.add("active");
+
+        const filterValue = clickedButton.getAttribute("data-filter");
+
+        renderTaskTable(tasks, filterValue);
+        renderTaskCards(tasks, filterValue);
+      });
+    });
   }
 
   // ─── EDIT MODAL ───────────────────────────────────────
