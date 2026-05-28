@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TaskFlow — Dashboard</title>
   <link rel="stylesheet" href="css/dashboard.css" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
-
 <body>
 
+  <!-- ═══════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════ -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <span class="logo-icon"><i class="fa-solid fa-bolt"></i></span>
@@ -45,8 +44,10 @@
 
     <div class="sidebar-footer">
       <div class="user-chip">
+        <!-- user-avatar initial: populated by JS e.g. user.name[0] -->
         <div class="user-avatar" id="sidebarAvatar"></div>
         <div class="user-info">
+          <!-- populated by JS: user.name -->
           <span class="user-name" id="sidebarUsername"></span>
           <span class="user-role">Student</span>
         </div>
@@ -55,12 +56,16 @@
     </div>
   </aside>
 
-
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════ -->
   <main class="main">
 
+    <!-- TOP BAR -->
     <header class="topbar">
       <div class="topbar-left">
         <h1 class="page-title">Dashboard</h1>
+        <!-- populated by JS: current date -->
         <p class="page-subtitle" id="currentDate"></p>
       </div>
       <div class="topbar-right">
@@ -70,17 +75,19 @@
         </button>
         <button class="notif-btn">
           <i class="fa-solid fa-bell"></i>
+          <!-- populated by JS: unread notification count -->
           <span class="notif-badge" id="notifCount"></span>
         </button>
       </div>
     </header>
 
-
+    <!-- SUMMARY CARDS -->
     <section class="summary-cards">
       <div class="card card--total">
         <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
         <div class="card-body">
           <span class="card-label">Total Tasks</span>
+          <!-- populated by JS: tasks.length -->
           <span class="card-value" id="countTotal">—</span>
         </div>
         <div class="card-trend" id="trendTotal"></div>
@@ -90,6 +97,7 @@
         <div class="card-icon"><i class="fa-solid fa-hourglass-start"></i></div>
         <div class="card-body">
           <span class="card-label">Pending</span>
+          <!-- populated by JS: tasks filtered by status -->
           <span class="card-value" id="countPending">—</span>
         </div>
         <div class="card-trend neutral">Not started yet</div>
@@ -99,6 +107,7 @@
         <div class="card-icon"><i class="fa-solid fa-spinner"></i></div>
         <div class="card-body">
           <span class="card-label">In Progress</span>
+          <!-- populated by JS -->
           <span class="card-value" id="countProgress">—</span>
         </div>
         <div class="card-trend up"><i class="fa-solid fa-arrow-trend-up"></i> Active now</div>
@@ -108,14 +117,17 @@
         <div class="card-icon"><i class="fa-solid fa-circle-check"></i></div>
         <div class="card-body">
           <span class="card-label">Completed</span>
+          <!-- populated by JS -->
           <span class="card-value" id="countCompleted">—</span>
         </div>
         <div class="card-trend up" id="trendCompleted"></div>
       </div>
     </section>
 
+    <!-- MIDDLE ROW -->
     <section class="mid-row">
 
+      <!-- OVERALL PROGRESS -->
       <div class="panel panel--progress">
         <div class="panel-header">
           <h2>Overall Progress</h2>
@@ -123,11 +135,13 @@
         </div>
         <div class="progress-ring-wrap">
           <svg class="progress-ring" viewBox="0 0 120 120">
-            <circle class="ring-bg" cx="60" cy="60" r="50" />
-            <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50" stroke-dasharray="314"
-              stroke-dashoffset="314" />
+            <circle class="ring-bg" cx="60" cy="60" r="50"/>
+            <!-- stroke-dashoffset populated by JS based on % complete -->
+            <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50"
+                    stroke-dasharray="314" stroke-dashoffset="314"/>
           </svg>
           <div class="ring-label">
+            <!-- populated by JS: Math.round(completed/total * 100) -->
             <span class="ring-pct" id="ringPct">—</span>
             <span class="ring-sub">Complete</span>
           </div>
@@ -148,13 +162,13 @@
         </div>
       </div>
 
-
+      <!-- UPCOMING DEADLINES -->
       <div class="panel panel--deadlines">
         <div class="panel-header">
           <h2>Upcoming Deadlines</h2>
           <a href="#" class="panel-link">View all</a>
         </div>
-
+      
         <ul class="deadline-list" id="deadlineList">
           <li class="empty-state">No upcoming deadlines</li>
         </ul>
@@ -162,7 +176,7 @@
 
     </section>
 
-
+    <!-- RECENT TASKS TABLE -->
     <section class="panel panel--tasks">
       <div class="panel-header">
         <h2>Recent Tasks</h2>
@@ -185,8 +199,7 @@
               <th>Actions</th>
             </tr>
           </thead>
-
-
+          
           <tbody id="taskTableBody">
             <tr>
               <td colspan="6" class="empty-state">No tasks found</td>
@@ -198,42 +211,57 @@
 
   </main>
 
-  <script src="js/dashboard.js"></script>
-
-  <!-- TASK MODAL -->
-  <div id="taskModal" class="modal hidden">
-
-    <div class="modal-content">
-
+  <!-- ═══════════════════════════════════════════
+       TASK EDIT MODAL
+  ═══════════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="editModal">
+    <div class="modal">
       <div class="modal-header">
-        <h2>Create Task</h2>
-        <button id="closeModal" class="close-btn">&times;</button>
+        <h2>Edit Task</h2>
+        <button id="closeEditModal"><i class="fa-solid fa-xmark"></i></button>
       </div>
-
-      <form id="taskForm">
-
-        <input type="text" id="taskTitle" placeholder="Task title" required>
-
-        <input type="text" id="taskCourse" placeholder="Course / Unit">
-
-        <textarea id="taskDescription" placeholder="Description"></textarea>
-
-        <input type="date" id="taskDueDate" required>
-
-        <select id="taskPriority">
-          <option value="low">Low</option>
-          <option value="medium" selected>Medium</option>
-          <option value="high">High</option>
-        </select>
-
-        <button type="submit" class="submit-btn">Create Task</button>
-
+      <form id="editForm">
+        <input type="hidden" id="editTaskId" />
+        <div class="form-group">
+          <label>Task Name</label>
+          <input type="text" id="editTitle" required />
+        </div>
+        <div class="form-group">
+          <label>Course</label>
+          <input type="text" id="editCourse" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="editDescription" />
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="date" id="editDueDate" />
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="editPriority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="editStatus">
+            <option value="todo">To Do</option>
+            <option value="progress">In Progress</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancelEdit">Cancel</button>
+          <button type="submit">Save Changes</button>
+        </div>
       </form>
-
     </div>
-
   </div>
-</body>
 
-</html><!-- test -->
-TEST_CHANGE
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
